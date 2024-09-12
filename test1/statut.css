@@ -12,13 +12,22 @@ h2 {
     text-align: center;
 }
 h3 {
+    font-size:17px;
+    text-align: center;
+}
+h4 {
+    font-size:16px;
+    text-align: center;
+}
+h5 {
     font-size:15px;
     text-align: center;
 }
-p.level1 {
+
+p.indent1 {
     margin-left: 40px; /* Wcięcie dla całego elementu */
 }
-p.level2 {
+p.indent2 {
     margin-left: 60px; /* Wcięcie dla całego elementu */
 }
 p.paragraph {

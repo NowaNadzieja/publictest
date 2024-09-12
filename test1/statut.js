@@ -35,49 +35,48 @@ function adjustTooltipPosition() {
     });
 }
 
-function make_sidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const chapters = document.querySelectorAll('.chapter');
+function make_level(level, sections) {
+    if (level > 5) return document.createElement('p');
 
     const ul = document.createElement('ul');
+    ul.classList.add(name + '-list');
 
-    chapters.forEach(chapter => {
+    sections.forEach(section => {
         const li = document.createElement('li');
-        const a = document.createElement('a');
+        if (section.querySelector('h'+level)) {
+            const a = document.createElement('a');
 
-        a.href = `#${chapter.id}`;
-        a.textContent = chapter.querySelector('h2').textContent;
+            a.href = `#${section.id}`;
+            a.textContent = section.querySelector('h'+level).textContent;
 
-        li.appendChild(a);
-
+            li.appendChild(a);
+        }
         // Dodanie sekcji
-        const sections = chapter.querySelectorAll('.section');
-        if (sections.length > 0) {
-            const sectionUl = document.createElement('ul');
-            sectionUl.classList.add('section-list');
-            sections.forEach(section => {
-                const sectionLi = document.createElement('li');
-                const sectionA = document.createElement('a');
-
-                sectionA.href = `#${section.id}`;
-                sectionA.textContent = section.querySelector('h3').textContent;
-
-                sectionLi.appendChild(sectionA);
-                sectionUl.appendChild(sectionLi);
-            });
-            li.appendChild(sectionUl);
+        const subsections = section.querySelectorAll('.level' + level);
+        if (subsections.length > 0) {
+            li.appendChild(make_level(level+1, subsections));
+        } else {
+            li.appendChild(make_level(level+1, sections));
         }
 
         ul.appendChild(li);
     });
+    return ul;
+}
+function make_sidebar() {
+    const sidebar = document.getElementById('sidebar');
 
-    sidebar.appendChild(ul);
+    const sections = document.querySelectorAll('.level2');
+
+    sidebar.appendChild(make_level(2, sections));
+
     sidebar.addEventListener('click', (event) => {
         if (event.target.tagName === 'A' && event.target.parentElement.querySelector('ul.section-list')) {
             const sectionList = event.target.parentElement.querySelector('ul.section-list');
             sectionList.classList.toggle('expanded');
         }
     });
+
 }
 document.addEventListener('DOMContentLoaded', () => {
     make_sidebar();
